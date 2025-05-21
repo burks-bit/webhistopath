@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\{
     AuthController,
     BranchController,
     ConfigurationController,
+    PatientController,
 };
 
 Route::get('/user', function (Request $request) {
@@ -32,3 +33,5 @@ Route::post('/deleteConfig', [ConfigurationController::class, 'deleteConfig']);
 
 Route::get('/getAuditLogs', [AuditLogController::class, 'getAuditLogs']);
 Route::get('/searchAuditLogs', [AuditLogController::class, 'searchAuditLogs']);
+
+Route::get('/searchPatient', [PatientController::class, 'searchPatient']);

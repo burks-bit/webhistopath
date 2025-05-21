@@ -25,6 +25,9 @@ class DatabaseSeeder extends Seeder
             BranchSeeder::class,
             ConfigurationSeeder::class,
             UserRoleSeeder::class,
+            PatientSeeder::class,
+            TestCodeSeeder::class,
+            TestGroupSeeder::class,
         ]);
     }
 }
