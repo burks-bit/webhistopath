@@ -10,6 +10,14 @@ class TestGroup extends Model
 
     protected $keyType = 'string';
 
+    protected $fillable = [
+        'id',
+        'name',
+        'description',
+        'status',
+        'department',
+    ];
+
     public function test_group_details()
     {
         return $this->hasMany(TestGroupDetail::class);

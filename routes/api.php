@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\{
     BranchController,
     ConfigurationController,
     PatientController,
+    TestGroupController,
+    TestOrderController,
 };
 
 Route::get('/user', function (Request $request) {
@@ -35,3 +37,10 @@ Route::get('/getAuditLogs', [AuditLogController::class, 'getAuditLogs']);
 Route::get('/searchAuditLogs', [AuditLogController::class, 'searchAuditLogs']);
 
 Route::get('/searchPatient', [PatientController::class, 'searchPatient']);
+
+Route::get('/getTestgroups', [TestGroupController::class, 'getTestgroups']);
+
+Route::post('/saveTestOrder', [TestOrderController::class, 'saveTestOrder']);
+
+Route::post('/savePatient', [PatientController::class, 'savePatient']);
+Route::put('/updatePatient', [PatientController::class, 'updatePatient']);

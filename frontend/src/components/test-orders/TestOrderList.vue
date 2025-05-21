@@ -45,6 +45,7 @@
                                 color="primary"
                                 @click:append-inner="searchPatient"
                                 autofocus
+                                variant="outlined"
                             ></v-text-field>
                             <div class="mt-4">
                                 <div v-if="patients && patients.length">
@@ -82,6 +83,16 @@
                                 </div>
                                 <div v-else class="text-center text-muted">
                                     No patients found.
+                                    <div class="mt-2">
+                                        <v-btn
+                                            color="indigo"
+                                            class="text-capitalize"
+                                            block
+                                            @click="newPatient"
+                                        >
+                                            <i class="fa fa-user-plus mr-1"></i> New Patient
+                                        </v-btn>
+                                    </div>
                                 </div>
                             </div>
 
@@ -102,8 +113,7 @@
                                             width="150"
                                             height="150"
                                         />
-                                        
-                                        <div class="pl-8 ">
+                                        <div class="pl-8">
                                             <p><strong>Name:</strong> {{ selectedPatient.last_name }}, {{ selectedPatient.first_name }} {{ selectedPatient.middle_name }}</p>
                                             <p><strong>Birthdate:</strong> {{ selectedPatient.birthdate }}</p>
                                             <p><strong>Age:</strong> {{ selectedPatient.age }}</p>
@@ -112,6 +122,16 @@
                                             <p><strong>Contact:</strong> {{ selectedPatient.contact_no }}</p>
                                         </div>
                                     </div>
+                                    <div class="ml-auto" >
+                                        <v-btn
+                                            color="success"
+                                            size="small"
+                                            class="text-capitalize"
+                                            @click="openEditPatientDialog(selectedPatient)">
+                                            <i class="fa fa-user-edit"></i> Edit
+                                        </v-btn>
+                                    </div>
+
                                 </div>
                                 <div v-else>
                                     <em>Select a patient to view details.</em>
@@ -122,20 +142,139 @@
 
                                 <div class="p-4 flex flex-wrap gap-2">
                                     <v-btn
-                                        v-for="test in histopathologyTests"
-                                        :key="test"
+                                        v-for="test in test_groups"
+                                        :key="test.id"
                                         @click="toggleTest(test)"
-                                        :variant="selectedTests.includes(test) ? 'flat' : 'outlined'"
+                                        :variant="selectedTests.some(t => t.id === test.id) ? 'flat' : 'outlined'"
                                         color="indigo"
                                         class="text-sm text-capitalize mt-1 ml-1"
+                                        :title="test.description"
                                     >
-                                       <i class="fas fa-flask mr-2"></i> {{ test }}
+                                    <i class="fas fa-flask mr-2"></i> {{ test.name }}
                                     </v-btn>
                                 </div>
-
                             </v-sheet>
                         </v-col>
                     </v-row>
+                </v-card-text>
+                    <v-card-actions>
+                        <v-btn
+                            color="primary"
+                            class="text-capitalize"
+                            variant="tonal"
+                            size="small"
+                            @click="closeNewTestOrderDialog"
+                        >
+                            <i class="fa fa-cancel"></i> Cancel
+                        </v-btn>
+                        <v-btn
+                            color="success"
+                            class="text-capitalize"
+                            variant="tonal"
+                            size="small"
+                            @click="saveTestOrder"
+                        >
+                            <i class="fa fa-save"></i> Save Test Order
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+        </v-dialog>
+
+        <v-dialog
+            v-model="newPatientDialog"
+            persistent
+            class="dialog-top"
+            max-width="50%"
+            height="70%"
+        >
+            <v-card>
+                <v-card-title>
+                    <span class="headline">{{ isEdit ? 'Edit' : 'New' }} Patient</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-form ref="unitForm" v-model="valid">
+                        <v-row>
+                            <v-col cols="12" md="4">
+                                <v-text-field
+                                    v-model="newPatients.first_name"
+                                    label="First Name"
+                                    variant="outlined"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4">
+                                <v-text-field
+                                    v-model="newPatients.middle_name"
+                                    label="Middle Name"
+                                    variant="outlined"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4">
+                                <v-text-field
+                                    v-model="newPatients.last_name"
+                                    label="Last Name"
+                                    variant="outlined"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" md="4">
+                                <v-text-field
+                                    v-model="newPatients.birthdate"
+                                    label="Birthdate"
+                                    variant="outlined"
+                                    type="date"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="4">
+                                <v-select
+                                    v-model="newPatients.sex"
+                                    label="Gender"
+                                    variant="outlined"
+                                    item-title="gender"
+                                    item-value="abbr"
+                                    :items="genders"
+                                ></v-select>
+                            </v-col>
+                            <v-col cols="12" md="4">
+                                <v-select
+                                    v-model="newPatients.civil_status"
+                                    label="Civil Status"
+                                    variant="outlined"
+                                    item-title="civil_status"
+                                    item-value="abbr"
+                                    :items="civil_statuses"
+                                ></v-select>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" md="6">
+                                <v-select
+                                    v-model="newPatients.religion"
+                                    label="Religion"
+                                    variant="outlined"
+                                    item-title="religion"
+                                    item-value="abbr"
+                                    :items="religions"
+                                ></v-select>
+                            </v-col>
+                            <v-col cols="12" md="6">
+                                <v-text-field
+                                    v-model="newPatients.contact_no"
+                                    label="Contact No"
+                                    variant="outlined"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" md="12">
+                                <v-text-field
+                                    v-model="newPatients.address"
+                                    label="Patient Address"
+                                    variant="outlined"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                    </v-form>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn
@@ -143,21 +282,22 @@
                         class="text-capitalize"
                         variant="tonal"
                         size="small"
-                        @click="closeNewTestOrderDialog"
+                        @click="cancelnewPatient"
                     >
                         <i class="fa fa-cancel"></i> Cancel
                     </v-btn>
+                    
                     <v-btn
                         color="success"
                         class="text-capitalize"
                         variant="tonal"
                         size="small"
-                        @click="saveTestOrder"
+                        @click="savePatient"
                     >
-                        <i class="fa fa-save"></i> Save Test Order
+                        <i class="fa fa-save"></i> Save
                     </v-btn>
                 </v-card-actions>
-                </v-card>
+            </v-card>
         </v-dialog>
     </div>
 </template>
@@ -175,11 +315,39 @@
         selectedPatient,
         selectPatient,
         clearSearch,
-        histopathologyTests,
         selectedTests,
         toggleTest,
-        saveTestOrder
+        saveTestOrder,
+        test_groups,
+        newPatient,
+        newPatients,
+        newPatientDialog,
+        valid,
+        savePatient,
+        cancelnewPatient,
+        openEditPatientDialog,
+        isEdit
     } = useNewTestOrder();
+
+    const genders = [
+        { gender: 'Male', abbr: 'M' },
+        { gender: 'Female', abbr: 'F' },
+    ]
+
+    const civil_statuses = [
+        { civil_status: 'None', abbr: 'None' },
+        { civil_status: 'Single', abbr: 'Single' },
+        { civil_status: 'Married', abbr: 'Married' },
+        { civil_status: 'Widowed', abbr: 'Widowed' },
+    ]
+
+    const religions = [
+        { religion: 'None', abbr: 'None' },
+        { religion: 'Roman Catholic', abbr: 'RC' },
+        { religion: 'Born Again', abbr: 'BAC' },
+        { religion: 'Iglesia ni Kristo', abbr: 'INC' },
+        { religion: 'Muslim', abbr: 'Muslim' },
+    ]
 </script>
             
 <style scoped>
