@@ -1,0 +1,28 @@
+// src/styles/settings.scss
+
+// Import Vuetify's core and theme variables
+@use 'vuetify' as *;
+
+// Override theme variables
+$vuetify: (
+  themes: (
+    light: (
+      primary: #1976D2,  // Light blue primary color
+      secondary: #424242,  // Secondary color
+      accent: #82B1FF,  // Accent color
+      error: #FF5252,  // Error color
+      info: #2196F3,  // Info color
+      success: #4CAF50,  // Success color
+      warning: #FFC107  // Warning color
+    ),
+    dark: (
+      primary: #1E88E5,  // Dark primary color (optional)
+      secondary: #B0BEC5,  // Dark secondary color (optional)
+      accent: #FF4081,  // Dark accent color (optional)
+      error: #F44336,  // Dark error color (optional)
+      info: #00BCD4,  // Dark info color (optional)
+      success: #4CAF50,  // Dark success color (optional)
+      warning: #FFC107  // Dark warning color (optional)
+    )
+  )
+);
