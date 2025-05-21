@@ -153,11 +153,43 @@ const routes = [
         }
       },
       {
+        path: 'test_orders',
+        name: 'HistotechTestOrder',
+        component: () => import('@/views/test-orders/TestOrderPage.vue'),
+        meta: {
+          title: 'Test Orders'
+        }
+      },
+      {
+        path: 'released_test_orders',
+        name: 'HistotechReleasedTestOrder',
+        component: () => import('@/views/test-orders/ReleasedTestOrderPage.vue'),
+        meta: {
+          title: 'Test Orders'
+        }
+      },
+      {
+        path: 'patients',
+        name: 'HistotechPatient',
+        component: () => import('@/views/patients/PatientPage.vue'),
+        meta: {
+          title: 'Patients'
+        }
+      },
+      {
         path: 'general_report',
         name: 'HistotechGeneralReport',
         component: () => import('@/views/analytics/GeneralReportPage.vue'),
         meta: {
           title: 'General Report'
+        }
+      },
+      {
+        path: 'audit_logs',
+        name: 'HistotechAuditLogs',
+        component: () => import('@/views/audit-logs/AuditLogsPage.vue'),
+        meta: {
+          title: 'Audit Logs'
         }
       },
       

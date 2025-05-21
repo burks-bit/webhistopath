@@ -16,14 +16,14 @@
               <i class="fas fa-vials me-2"></i> Test Orders
             </v-list-item>
           </template>
-          <v-list-item title="" to="/histotech/products">
+          <v-list-item title="" to="/histotech/test_orders">
             <i class="fas fa-tachometer-alt me-2"></i> Test Order Dashboard
           </v-list-item>
-          <v-list-item title="" to="/histotech/units">
+          <v-list-item title="" to="/histotech/released_test_orders">
             <i class="fas fa-check-circle me-2"></i> Released Test Orders
           </v-list-item>
-          <v-list-item title="" to="/histotech/categories">
-            <i class="fas fa-search me-2"></i> Search Patient
+          <v-list-item title="" to="/histotech/patients">
+            <i class="fas fa-users me-2"></i> Patients
           </v-list-item>
         </v-list-group>
 

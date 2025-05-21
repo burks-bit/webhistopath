@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->enum('user_type', ['admin', 'histotech', 'pathologist'])->length(50);
+            $table->enum('user_type', ['admin', 'histotech', 'pathologist', 'clerk'])->length(50);
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
