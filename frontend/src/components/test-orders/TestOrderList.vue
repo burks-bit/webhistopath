@@ -14,11 +14,83 @@
                         color="primary"  
                         @click="openNewTestOrder" 
                     >
-                        New Test Order
+                       <i class="fa fa-plus me-1"></i> New Test Order
                     </v-btn>
                 </v-sheet>
             </v-col>
         </v-row>
+
+        <v-table>
+            <thead>
+                <tr>
+                    <th class="text-center">Patient Name</th>
+                    <th class="text-center">Accession #</th>
+                    <th class="text-center" colspan="5">Histopath Phases</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(order, index) in testOrders" :key="index" class="">
+                    <td class="text-center align-top pt-1 pb-2">
+                        <b class="text-success text-uppercase">{{ order.patientName }}</b><br>
+                        <small class="text-muted">49 y/o • Male</small><br>
+                        <v-btn class="mt-2 text-capitalize" color="info" size="x-small" variant="tonal">
+                            <i class="fa fa-edit me-1"></i> Edit Profile
+                        </v-btn>
+                        <!-- <b>S25-0001</b><br>
+                        <small class="text-muted">Surgical Pathology Report</small><br>
+                        <small class="text-muted">05/20/2025</small> -->
+                    </td>
+
+                    <td class="text-center align-top">
+                        <b>S25-0001</b><br>
+                        <small class="text-muted">Surgical Pathology Report</small><br>
+                        <small class="text-muted">05/20/2025</small>
+                    </td>
+
+                    <td class="text-center" colspan="5">
+                        <div class="d-flex flex-wrap justify-center">
+                        <v-btn size="x-small" color="info" class="ma-1" @click="openPhaseDialog('receiving', order)">
+                            <i class="fa fa-pencil me-1"></i> Receiving
+                        </v-btn>
+
+                        <v-btn size="x-small" color="orange" class="ma-1" @click="openPhaseDialog('grossing', order)">
+                            <i class="fa fa-scissors me-1"></i> Grossing
+                        </v-btn>
+
+                        <v-btn size="x-small" color="indigo" class="ma-1" @click="openPhaseDialog('initialRead', order)">
+                            <i class="fa fa-book-open me-1"></i> Initial Read
+                        </v-btn>
+
+                        <v-btn size="x-small" color="indigo" class="ma-1" @click="openPhaseDialog('finalRead', order)">
+                            <i class="fa fa-bookmark me-1"></i> Final Read
+                        </v-btn>
+
+                        <v-btn size="x-small" color="success" class="ma-1" @click="openPhaseDialog('validation', order)">
+                            <i class="fa fa-book-open-reader me-1"></i> Validation
+                        </v-btn>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            </v-table>
+
+            <!-- Phase Dialog -->
+            <v-dialog v-model="phaseDialog.visible" max-width="500">
+            <v-card>
+                <v-card-title class="text-h6">
+                {{ capitalize(phaseDialog.phase) }} - {{ phaseDialog.order?.patientName }}
+                </v-card-title>
+                <v-card-text>
+                <!-- Insert your phase-specific form or logic here -->
+                <p>Perform actions related to <strong>{{ phaseDialog.phase }}</strong> phase here.</p>
+                </v-card-text>
+                <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text @click="phaseDialog.visible = false">Cancel</v-btn>
+                <v-btn color="primary" @click="savePhaseAction">Save</v-btn>
+                </v-card-actions>
+            </v-card>
+            </v-dialog>
 
         <v-dialog
             v-model="newTestOrderDialog"
@@ -102,7 +174,7 @@
                         <v-col cols="12" md="8">
                             <v-sheet class="pa-4">
                                 <div class="px-2 py-2 bg-indigo text-white font-weight-bold text-sm rounded-t-md">
-                                    Patient Details
+                                    Patient Info
                                 </div>
                                 <div v-if="selectedPatient" class="d-flex align-center gap-2">
                                     <div class="d-flex align-start gap-4 pt-5">
@@ -134,10 +206,15 @@
 
                                 </div>
                                 <div v-else>
-                                    <em>Select a patient to view details.</em>
+                                    <img 
+                                        src="/web_images/loader.png" 
+                                        alt="Patient Image" 
+                                        class=""
+                                        height="170"
+                                    />
                                 </div>
                                 <div class="px-2 py-2 bg-indigo text-white font-weight-bold text-sm rounded-t-md mt-5">
-                                    Select Procedures
+                                    Procedure Info
                                 </div>
 
                                 <div class="p-4 flex flex-wrap gap-2">
@@ -348,6 +425,47 @@
         { religion: 'Iglesia ni Kristo', abbr: 'INC' },
         { religion: 'Muslim', abbr: 'Muslim' },
     ]
+
+    const testOrders = ref([
+        {
+            patientName: 'John Doe',
+            receiving: 'Received',
+            grossing: 'Done',
+            initialRead: 'In Progress',
+            finalRead: '',
+            validation: ''
+        },
+        {
+            patientName: 'Jane Smith',
+            receiving: '',
+            grossing: '',
+            initialRead: '',
+            finalRead: '',
+            validation: ''
+        }
+    ])
+
+    const phaseDialog = ref({
+        visible: false,
+        phase: '',
+        order: null
+    })
+
+    function openPhaseDialog(phase, order) {
+        phaseDialog.value.phase = phase
+        phaseDialog.value.order = order
+        phaseDialog.value.visible = true
+    }
+
+    function savePhaseAction() {
+        // Add your save logic here
+        console.log('Saving phase action for:', phaseDialog.value)
+        phaseDialog.value.visible = false
+    }
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1)
+    }
 </script>
             
 <style scoped>

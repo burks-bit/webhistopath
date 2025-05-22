@@ -22,6 +22,24 @@
           <v-list-item title="" to="/admin/units">
             <i class="fas fa-microscope me-2"></i> Test Codes
           </v-list-item>
+          <v-list-item title="" to="/admin/units">
+            <i class="fas fa-boxes-packing me-2"></i> Specimen Categories
+          </v-list-item>
+        </v-list-group>
+
+        <!-- Phases -->
+        <v-list-group v-model="expandedGroup" value="phases">
+          <template v-slot:activator="{ props }">
+            <v-list-item title="" v-bind="props">
+              <i class="fa-solid fa-diagram-next me-2"></i> Phases
+            </v-list-item>
+          </template>
+          <v-list-item title="" to="/admin/products">
+            <i class="fas fa-diagram-next me-2"></i> Phases
+          </v-list-item>
+          <v-list-item title="" to="/admin/units">
+            <i class="fas fa-user-lock me-2"></i> Phases Access
+          </v-list-item>
         </v-list-group>
 
 

@@ -133,9 +133,10 @@ export function useNewTestOrder() {
                 //   Swal.fire('Success', 'patient details updated successfully.', 'success')
                 // alert('patient details updated successfully')
                 // clearSearch()
-                // newPatients.value = {};
-                // newPatientDialog.value = false;
-                // isEdit.value = false
+                newPatientDialog.value = false;
+                isEdit.value = false
+                newPatients.value = {};
+                newPatientDialog.value = false;
             } else {
                 await axios.post(`${backendAPIURL.backendIP()}api/savePatient`, newPatients.value)
                 // alert('patient details saved successfully')
@@ -162,24 +163,24 @@ export function useNewTestOrder() {
 
     return {
         patients,
-        openNewTestOrder,
-        newTestOrderDialog,
-        closeNewTestOrderDialog,
-        searchQuery,
-        isEdit,
-        searchPatient,
-        selectPatient,
-        selectedPatient,
-        clearSearch,
-        selectedTests,
-        toggleTest,
-        saveTestOrder,
-        getTestgroups,
-        test_groups,
-        newPatient,
         newPatientDialog,
         newPatients,
         valid,
+        newTestOrderDialog,
+        searchQuery,
+        isEdit,
+        selectedPatient,
+        selectedTests,
+        test_groups,
+        openNewTestOrder,
+        closeNewTestOrderDialog,
+        searchPatient,
+        selectPatient,
+        clearSearch,
+        toggleTest,
+        saveTestOrder,
+        getTestgroups,
+        newPatient,
         savePatient,
         cancelnewPatient,
         openEditPatientDialog

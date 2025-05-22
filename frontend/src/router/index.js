@@ -148,9 +148,6 @@ const routes = [
         path: '',
         name: 'HistotechHome',
         component: () => import('@/views/histotech/HistotechHome.vue'),
-        meta: {
-          title: 'Histotech'
-        }
       },
       {
         path: 'test_orders',
