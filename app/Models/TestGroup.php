@@ -23,4 +23,9 @@ class TestGroup extends Model
         return $this->hasMany(TestGroupDetail::class);
     }
 
+    public function test_results()
+    {
+        return $this->hasMany(TestResult::class, 'test_group_id');
+    }
+
 }

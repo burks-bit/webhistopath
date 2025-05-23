@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Patient;
+use App\Models\PatientOrderDetail;
 use Illuminate\Support\Facades\Log;
 use DateTime;
 use Exception;
@@ -42,6 +43,7 @@ class PatientService
         $birthdate = new DateTime($data['birthdate']);
         $today = new DateTime();
         $age = $today->diff($birthdate)->y;
+
         $patient = Patient::find($data['id']);
 
         if ($patient) {
@@ -57,8 +59,25 @@ class PatientService
             $patient->civil_status = $data['civil_status'];
             $patient->contact_no = $data['contact_no'];
             $patient->updated_at = now();
-
             $patient->save();
+            
+            //  if($patient->save()){
+            //      $patient_order_details = PatientOrderDetail::where('patient_id', $patient->id)->get();
+            //      Log::info($patient_order_details);
+            //      $patient_order_details->branch_id = $data['branch_id'];
+            //      $patient_order_details->first_name = $data['first_name'];
+            //      $patient_order_details->middle_name = $data['middle_name'];
+            //      $patient_order_details->last_name = $data['last_name'];
+            //      $patient_order_details->birthdate = $data['birthdate'];
+            //      $patient_order_details->age = $age;
+            //      $patient_order_details->address = $data['address'];
+            //      $patient_order_details->religion = $data['religion'];
+            //      $patient_order_details->sex = $data['sex'];
+            //      $patient_order_details->civil_status = $data['civil_status'];
+            //      $patient_order_details->contact_no = $data['contact_no'];
+            //      $patient_order_details->updated_at = now();
+            //      $patient_order_details->save();
+            //  }
 
             return $patient;
         }

@@ -22,4 +22,9 @@ class TestOrderDetail extends Model
     {
         return $this->hasMany(TestOrderResult::class, 'test_order_detail_id');
     }
+
+    public function test_code()
+    {
+        return $this->belongsTo(TestCode::class, 'test_id');
+    }
 }

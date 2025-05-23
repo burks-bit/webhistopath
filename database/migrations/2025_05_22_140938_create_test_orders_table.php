@@ -16,12 +16,12 @@ return new class extends Migration
             $table->string('specimen_id');
             $table->tinyInteger('order_status');
             $table->tinyInteger('branch_id');
-            $table->tinyInteger('release_level_id');
-            $table->date('release_date');
-            $table->time('release_time');
-            $table->date('cancel_date');
-            $table->time('cancel_time');
-            $table->string('cancelling_comment');
+            $table->tinyInteger('release_level_id')->nullable();
+            $table->date('release_date')->nullable();
+            $table->time('release_time')->nullable();
+            $table->date('cancel_date')->nullable();
+            $table->time('cancel_time')->nullable();
+            $table->string('cancelling_comment')->nullable();
             $table->timestamps();
         });
     }

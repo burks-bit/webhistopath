@@ -16,4 +16,9 @@ class TestCode extends Model
         'description',
         'status',
     ];
+
+    public function test_order_details()
+    {
+        return $this->belongsTo(TestOrderDetail::class, 'test_id');
+    }
 }

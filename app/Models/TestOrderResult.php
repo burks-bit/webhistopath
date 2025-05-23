@@ -15,6 +15,6 @@ class TestOrderResult extends Model
 
     public function test_order_detail()
     {
-        return $this->belongsTo(TestOrderDetail::class, 'id');
+        return $this->belongsTo(TestOrderDetail::class);
     }
 }

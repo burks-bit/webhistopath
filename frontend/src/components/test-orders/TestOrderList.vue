@@ -19,63 +19,104 @@
                 </v-sheet>
             </v-col>
         </v-row>
+        
+        <div v-if="loading">
+            <v-progress-linear model-value="20" indeterminate></v-progress-linear>
+        </div>
+        <div v-else>
+            <v-table style="height: 650px;">
+                <thead>
+                    <tr>
+                    <th class="text-center" style="">Patient Name</th>
+                    <th class="text-center" style="">Accession #</th>
+                    <th class="text-center" style="" colspan="5">Histopath Phases</th>
+                    </tr>
+                </thead>
 
-        <v-table>
-            <thead>
-                <tr>
-                    <th class="text-center">Patient Name</th>
-                    <th class="text-center">Accession #</th>
-                    <th class="text-center" colspan="5">Histopath Phases</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(order, index) in testOrders" :key="index" class="">
-                    <td class="text-center align-top pt-1 pb-2">
-                        <b class="text-success text-uppercase">{{ order.patientName }}</b><br>
-                        <small class="text-muted">49 y/o • Male</small><br>
-                        <v-btn class="mt-2 text-capitalize" color="info" size="x-small" variant="tonal">
-                            <i class="fa fa-edit me-1"></i> Edit Profile
-                        </v-btn>
-                        <!-- <b>S25-0001</b><br>
-                        <small class="text-muted">Surgical Pathology Report</small><br>
-                        <small class="text-muted">05/20/2025</small> -->
-                    </td>
+                <tbody>
+                    <template v-for="(order, index) in testOrders.data" :key="order.id">
+                        <tr>
+                            <td class="align-top pt-1 pb-2">
+                            <div class="d-flex">
+                                <div class="pt-2">
+                                    <img 
+                                        :src="order.patient.sex === 'M' ? '/web_images/male.png' : '/web_images/female.png'" 
+                                        alt="Patient Image"
+                                        class="rounded-full object-cover"
+                                        width="65"
+                                        height="65"
+                                    />
+                                </div>
+                                <div class="pl-3 pt-1">
+                                    <b class="text-success text-uppercase">{{ order.patient.last_name }}</b>,
+                                    {{ order.patient.first_name }} {{ order.patient.middle_name }}
+                                    <br>
+                                    <small class="text-muted">{{ order.patient.age }} y/o • {{ order.patient.sex }}</small><br>
+                                    <v-btn
+                                        class="mt-2 text-capitalize"
+                                        color="info"
+                                        size="x-small"
+                                        variant="tonal"
+                                        @click="openEditPatientTestOrderDialog(order.patient)"
+                                    >
+                                        <i class="fa fa-edit me-1"></i> Edit Profile
+                                    </v-btn>
+                                </div>
+                            </div>
+                            </td>
 
-                    <td class="text-center align-top">
-                        <b>S25-0001</b><br>
-                        <small class="text-muted">Surgical Pathology Report</small><br>
-                        <small class="text-muted">05/20/2025</small>
-                    </td>
+                            <td class="text-center align-top">
+                                <!-- <b>{{ order.specimen_id }}</b><br> -->
+                                <v-btn
+                                    class="mt-2 text-capitalize"
+                                    color="orange"
+                                    size="x-small"
+                                    variant="tonal"
+                                    @click="openAddAccessionDialog(order)"
+                                >
+                                    <i class="fa fa-address-card me-1"></i> Set Accession
+                                </v-btn>
+                                <br>
+                                <small class="text-muted">{{ order.test_results[0]?.test_group?.name || 'N/A' }} Report</small><br>
+                                <small class="text-muted">{{ order.date_requested }}</small>
+                            </td>
 
-                    <td class="text-center" colspan="5">
-                        <div class="d-flex flex-wrap justify-center">
-                        <v-btn size="x-small" color="info" class="ma-1" @click="openPhaseDialog('receiving', order)">
-                            <i class="fa fa-pencil me-1"></i> Receiving
-                        </v-btn>
-
-                        <v-btn size="x-small" color="orange" class="ma-1" @click="openPhaseDialog('grossing', order)">
-                            <i class="fa fa-scissors me-1"></i> Grossing
-                        </v-btn>
-
-                        <v-btn size="x-small" color="indigo" class="ma-1" @click="openPhaseDialog('initialRead', order)">
-                            <i class="fa fa-book-open me-1"></i> Initial Read
-                        </v-btn>
-
-                        <v-btn size="x-small" color="indigo" class="ma-1" @click="openPhaseDialog('finalRead', order)">
-                            <i class="fa fa-bookmark me-1"></i> Final Read
-                        </v-btn>
-
-                        <v-btn size="x-small" color="success" class="ma-1" @click="openPhaseDialog('validation', order)">
-                            <i class="fa fa-book-open-reader me-1"></i> Validation
-                        </v-btn>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
+                            <td class="text-center" colspan="5">
+                                <div class="d-flex flex-wrap justify-center">
+                                    <v-btn size="x-small" color="info" class="ma-1" @click="openPhaseDialog('receiving', order)">
+                                        <i class="fa fa-pencil me-1"></i> Receiving
+                                    </v-btn>
+                                    <v-btn size="x-small" color="orange" class="ma-1" @click="openPhaseDialog('grossing', order)">
+                                        <i class="fa fa-scissors me-1"></i> Grossing
+                                    </v-btn>
+                                    <v-btn size="x-small" color="indigo" class="ma-1" @click="openPhaseDialog('initialRead', order)">
+                                        <i class="fa fa-book-open me-1"></i> Initial Read
+                                    </v-btn>
+                                    <v-btn size="x-small" color="indigo" class="ma-1" @click="openPhaseDialog('finalRead', order)">
+                                        <i class="fa fa-bookmark me-1"></i> Final Read
+                                    </v-btn>
+                                    <v-btn size="x-small" color="success" class="ma-1" @click="openPhaseDialog('validation', order)">
+                                        <i class="fa fa-book-open-reader me-1"></i> Validation
+                                    </v-btn>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
             </v-table>
 
-            <!-- Phase Dialog -->
-            <v-dialog v-model="phaseDialog.visible" max-width="500">
+            <v-pagination
+                v-if="testOrders?.last_page > 1"
+                v-model="currentPage"
+                :length="testOrders.last_page"
+                color="primary"
+                class="mt-4"
+            />
+        </div>
+
+
+        <!-- Phase Dialog -->
+        <v-dialog v-model="phaseDialog.visible" max-width="500">
             <v-card>
                 <v-card-title class="text-h6">
                 {{ capitalize(phaseDialog.phase) }} - {{ phaseDialog.order?.patientName }}
@@ -90,7 +131,7 @@
                 <v-btn color="primary" @click="savePhaseAction">Save</v-btn>
                 </v-card-actions>
             </v-card>
-            </v-dialog>
+        </v-dialog>
 
         <v-dialog
             v-model="newTestOrderDialog"
@@ -266,7 +307,19 @@
         >
             <v-card>
                 <v-card-title>
-                    <span class="headline">{{ isEdit ? 'Edit' : 'New' }} Patient</span>
+                    <div class="d-flex">
+                        <span class="headline">{{ isEdit ? 'Edit' : 'New' }} Patient</span>
+                        <div class="ml-auto">
+                            <v-btn
+                                size="small"
+                                color="red"
+                                @click="newPatientDialog = false"
+                                icon=""
+                            >
+                                <i class="fa fa-close"></i>
+                            </v-btn>
+                        </div>
+                    </div>
                 </v-card-title>
                 <v-card-text>
                     <v-form ref="unitForm" v-model="valid">
@@ -403,7 +456,12 @@
         savePatient,
         cancelnewPatient,
         openEditPatientDialog,
-        isEdit
+        isEdit,
+        openEditPatientTestOrderDialog,
+        testOrders,
+        currentPage,
+        getTestOrders,
+        loading,
     } = useNewTestOrder();
 
     const genders = [
@@ -426,25 +484,6 @@
         { religion: 'Muslim', abbr: 'Muslim' },
     ]
 
-    const testOrders = ref([
-        {
-            patientName: 'John Doe',
-            receiving: 'Received',
-            grossing: 'Done',
-            initialRead: 'In Progress',
-            finalRead: '',
-            validation: ''
-        },
-        {
-            patientName: 'Jane Smith',
-            receiving: '',
-            grossing: '',
-            initialRead: '',
-            finalRead: '',
-            validation: ''
-        }
-    ])
-
     const phaseDialog = ref({
         visible: false,
         phase: '',
@@ -458,7 +497,6 @@
     }
 
     function savePhaseAction() {
-        // Add your save logic here
         console.log('Saving phase action for:', phaseDialog.value)
         phaseDialog.value.visible = false
     }

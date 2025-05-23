@@ -18,8 +18,13 @@ class TestOrder extends Model
         'cancelling_comment'
     ];
 
-    public function test_order_details()
+    public function test_result()
     {
-        return $this->hasMany(TestOrderDetail::class, 'test_order_id');
+        return $this->hasOne(TestResult::class, 'test_order_id');
+    }
+
+    public function test_results()
+    {
+        return $this->hasMany(TestResult::class, 'test_order_id');
     }
 }

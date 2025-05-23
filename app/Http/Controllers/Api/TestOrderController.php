@@ -23,16 +23,29 @@ class TestOrderController extends Controller
             Log::info('accessing saveTestOrder ctrlr');
             $data = $request->all();
             Log::info($data);
-            $test_order = $this->testorderService->save_testorder($data);
-            // return response()->json([
-            //     'success' => true,
-            //     'message' => 'Config created successfully!',
-            //     'configurations' => $configurations
-            // ], 201);
+            $test_orders = $this->testorderService->save_testorder($data);
+            return response()->json([
+                'success' => true,
+                'test_orders' => $test_orders
+            ], 201);
         } catch (Exception $e) {
-            // return response()->json([
-            //     'error' => 'Error creating Config.'
-            // ], 500);
+            return response()->json([
+                'error' => 'Error creating test order'
+            ], 500);
+        }
+    }
+
+    public function getTestOrders(){
+        try {
+            $test_orders = $this->testorderService->get_test_orders();
+            return response()->json([
+                'success' => true,
+                'test_orders' => $test_orders
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Error fetching test order'
+            ], 500);
         }
     }
 

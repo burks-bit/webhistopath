@@ -22,8 +22,29 @@ class PatientOrder extends Model
         'status',
     ];
 
-    public function patients()
+    // public function patients()
+    // {
+    //     return $this->belongsTo(Patient::class, 'id');
+    // }
+
+    public function patient() {
+        return $this->belongsTo(Patient::class);
+    }
+
+    public function test_orders()
     {
-        return $this->belongsTo(Patient::class, 'id');
+        return $this->hasMany(TestOrder::class, 'specimen_id', 'specimen_id');
+    }
+
+    public function test_results()
+    {
+        return $this->hasManyThrough(
+            TestResult::class,
+            TestOrder::class,
+            'specimen_id',     // Foreign key on TestOrder
+            'test_order_id',   // Foreign key on TestResult
+            'specimen_id',     // Local key on PatientOrder
+            'id'               // Local key on TestOrder
+        );
     }
 }

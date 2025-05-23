@@ -13,6 +13,11 @@ class TestResult extends Model
 
     public function test_order_details()
     {
-        return $this->hasMany(TestOrderDetail::class, 'id');
+        return $this->hasMany(TestOrderDetail::class, 'test_result_id');
+    }
+
+    public function test_group()
+    {
+        return $this->belongsTo(TestGroup::class, 'test_group_id');
     }
 }

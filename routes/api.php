@@ -41,6 +41,7 @@ Route::get('/searchPatient', [PatientController::class, 'searchPatient']);
 Route::get('/getTestgroups', [TestGroupController::class, 'getTestgroups']);
 
 Route::post('/saveTestOrder', [TestOrderController::class, 'saveTestOrder']);
+Route::get('/getTestOrders', [TestOrderController::class, 'getTestOrders']);
 
 Route::post('/savePatient', [PatientController::class, 'savePatient']);
 Route::put('/updatePatient', [PatientController::class, 'updatePatient']);

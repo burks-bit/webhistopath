@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import APIConstants from '@/constants/ApiURL';
 import Swal from 'sweetalert2'
@@ -15,6 +15,10 @@ export function useNewTestOrder() {
     const newPatientDialog = ref(false);
     const valid = ref(false);
     const isEdit = ref(false);
+    const testOrders = ref({})
+    const currentPage = ref(1)
+    const loading = ref(false)
+
 
     const newPatients = ref({
         first_name: '',
@@ -59,16 +63,7 @@ export function useNewTestOrder() {
             selectedTests.value.push(test);
         }
     };
-    // const toggleTest = (test) => {
-    //     const index = selectedTests.findIndex(t => t.id === test.id);
-    //     if (index > -1) {
-    //         selectedTests.splice(index, 1);
-    //     } else {
-    //         selectedTests.push(test);
-    //     }
-    // };
-
-
+    
     const selectPatient = (patient) => {
         selectedPatient.value = patient;
     };
@@ -98,19 +93,44 @@ export function useNewTestOrder() {
         console.log(selectedTests.value)
 
         try {
-            await axios.post(`${backendAPIURL.backendIP()}api/saveTestOrder`,{
+            const response = await axios.post(`${backendAPIURL.backendIP()}api/saveTestOrder`,{
                 patient: selectedPatient.value,
                 tests: selectedTests.value
             })
-            Swal.fire('Success', 'test order saved successfully.', 'success')
-
-            // clearSearch()
-            // closeNewTestOrderDialog()
+            console.log(response.data)
+            if(response.data.success == true){
+                testOrders.value = response.data.test_orders;
+                Swal.fire('Success', 'test order saved successfully. test orders fetched!', 'success')
+                clearSearch()
+                closeNewTestOrderDialog()
+                getTestOrders()
+            }
         } catch (error) {
             console.error('Error saving test order:', error)
             Swal.fire('Error', 'Failed to save test order.', 'error')
         }
     }
+
+    const getTestOrders = async () => {
+        try {
+            loading.value = true;
+            const response = await axios.get(
+                `${backendAPIURL.backendIP()}api/getTestOrders?page=${currentPage.value}`
+            );
+            testOrders.value = response.data.test_orders;
+            console.log(response.data)
+        } catch (error) {
+            console.error('Error fetching test order:', error);
+            Swal.fire('Error', 'Failed to fetch test orders.', 'error');
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    watch(currentPage, () => {
+        getTestOrders();
+    });
+
 
     const newPatient = () => {
         isEdit.value = false;
@@ -137,6 +157,7 @@ export function useNewTestOrder() {
                 isEdit.value = false
                 newPatients.value = {};
                 newPatientDialog.value = false;
+                getTestOrders()
             } else {
                 await axios.post(`${backendAPIURL.backendIP()}api/savePatient`, newPatients.value)
                 // alert('patient details saved successfully')
@@ -159,6 +180,16 @@ export function useNewTestOrder() {
         newPatientDialog.value = true
     }
 
+    const openEditPatientTestOrderDialog = (selectedPatient) => {
+        isEdit.value = true
+        newPatients.value = { ...selectedPatient }
+        newPatientDialog.value = true
+    }
+
+    onMounted(() => {
+        getTestOrders()
+    });
+
     getTestgroups()
 
     return {
@@ -172,6 +203,9 @@ export function useNewTestOrder() {
         selectedPatient,
         selectedTests,
         test_groups,
+        testOrders,
+        currentPage,
+        loading,
         openNewTestOrder,
         closeNewTestOrderDialog,
         searchPatient,
@@ -183,6 +217,8 @@ export function useNewTestOrder() {
         newPatient,
         savePatient,
         cancelnewPatient,
-        openEditPatientDialog
+        openEditPatientDialog,
+        getTestOrders,
+        openEditPatientTestOrderDialog,
     }
 }
