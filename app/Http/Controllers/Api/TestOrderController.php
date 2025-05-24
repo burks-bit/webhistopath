@@ -35,9 +35,13 @@ class TestOrderController extends Controller
         }
     }
 
-    public function getTestOrders(){
+    public function getTestOrders(Request $request)
+    {
         try {
-            $test_orders = $this->testorderService->get_test_orders();
+            $data = $request->all();
+            Log::info('============= public function getTestOrders ====');
+            Log::info($data);
+            $test_orders = $this->testorderService->get_test_orders($data);
             return response()->json([
                 'success' => true,
                 'test_orders' => $test_orders

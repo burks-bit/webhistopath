@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-row no-gutters>
+        <v-row>
             <v-col>
                 <v-sheet class="pa-2 ma-2">
                     <h4>Test Orders</h4>
@@ -20,22 +20,25 @@
             </v-col>
         </v-row>
         
+        <TestOrderFilter @submit-filter="handleFilterSubmit" />
+        
         <div v-if="loading">
             <v-progress-linear model-value="20" indeterminate></v-progress-linear>
         </div>
         <div v-else>
-            <v-table style="height: 650px;">
+            <v-table style="height: 515px;" class="table-fixed">
                 <thead>
                     <tr>
-                    <th class="text-center" style="">Patient Name</th>
-                    <th class="text-center" style="">Accession #</th>
-                    <th class="text-center" style="" colspan="5">Histopath Phases</th>
+                    <th class="text-center bg-indigo" style="" colspan="2">Patient Name</th>
+                    <th class="text-center bg-indigo" style="">Accession #</th>
+                    <th class="text-center bg-indigo" style="" colspan="5">Histopath Phases</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <template v-for="(order, index) in testOrders.data" :key="order.id">
                         <tr>
+                            <td class="pa-2 bg-green" style="width: 1px;"></td>
                             <td class="align-top pt-1 pb-2">
                             <div class="d-flex">
                                 <div class="pt-2">
@@ -66,8 +69,9 @@
                             </td>
 
                             <td class="text-center align-top">
+                                <b>20250523-00{{ index+1 }}</b><br>
                                 <!-- <b>{{ order.specimen_id }}</b><br> -->
-                                <v-btn
+                                <!-- <v-btn
                                     class="mt-2 text-capitalize"
                                     color="orange"
                                     size="x-small"
@@ -75,8 +79,7 @@
                                     @click="openAddAccessionDialog(order)"
                                 >
                                     <i class="fa fa-address-card me-1"></i> Set Accession
-                                </v-btn>
-                                <br>
+                                </v-btn> -->
                                 <small class="text-muted">{{ order.test_results[0]?.test_group?.name || 'N/A' }} Report</small><br>
                                 <small class="text-muted">{{ order.date_requested }}</small>
                             </td>
@@ -111,8 +114,12 @@
                 :length="testOrders.last_page"
                 color="primary"
                 class="mt-4"
+                prev-icon="fa fa-chevron-left"
+                next-icon="fa fa-chevron-right"
             />
         </div>
+
+        
 
 
         <!-- Phase Dialog -->
@@ -434,7 +441,12 @@
 
 <script setup>
     import { useNewTestOrder } from '@/composables/useNewTestOrder';
+    import TestOrderFilter from '@/components/test-orders/TestOrderFilter';
 
+    const handleFilterSubmit = (formData) => {
+        console.log('Received from child:', formData)
+        getTestOrders(formData)
+    }
     const {
         openNewTestOrder,
         newTestOrderDialog,

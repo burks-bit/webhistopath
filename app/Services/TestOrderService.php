@@ -132,22 +132,32 @@ class TestOrderService
         }
     }
 
-    public function get_test_orders()
+    public function get_test_orders($data)
     {
-        // $test_orders = Patient::with([
-        //     'patient_orders',
-        //     'patient_order_details',
-        //     'patient_orders.test_results',
-        //     'patient_orders.test_results.test_group',
-        //     'patient_orders.test_results.test_order_details',
-        //     'patient_orders.test_results.test_order_details.test_order_results',
-        // ])->paginate(6);
-        
-        $test_orders = PatientOrder::with([
-            'patient',
-            'test_results.test_group',
-            'test_results.test_order_details.test_order_results',
-        ])->orderByRaw('TIMESTAMPDIFF(SECOND, date_requested, time_requested) DESC')->paginate(6);
+        if(isset($data['filter_parameter'])){
+            Log::info('get_test_orders With filter');
+            $test_orders = PatientOrder::with([
+                'patient',
+                'test_results.test_group',
+                'test_results.test_order_details.test_order_results',
+            ])
+            ->whereBetween('date_requested', [
+                $data['filter_parameter']['start_date'],
+                $data['filter_parameter']['end_date']
+            ])
+            ->orderByRaw('TIMESTAMPDIFF(SECOND, date_requested, time_requested) DESC')
+            ->paginate(5);
+        } else {
+            Log::info('get_test_orders Without filter');
+            $test_orders = PatientOrder::with([
+                'patient',
+                'test_results.test_group',
+                'test_results.test_order_details.test_order_results',
+            ])
+            ->where('date_requested', date('Y-m-d'))
+            ->orderByRaw('TIMESTAMPDIFF(SECOND, date_requested, time_requested) DESC')
+            ->paginate(5);
+        }
 
         Log::info($test_orders);
 

@@ -111,11 +111,18 @@ export function useNewTestOrder() {
         }
     }
 
-    const getTestOrders = async () => {
+    const getTestOrders = async (filter = {}) => {
         try {
             loading.value = true;
+            console.log('=======filter========')
+            console.log(filter)
+            const params = {
+                page: currentPage.value,
+                filter_parameter: filter
+            };
             const response = await axios.get(
-                `${backendAPIURL.backendIP()}api/getTestOrders?page=${currentPage.value}`
+                `${backendAPIURL.backendIP()}api/getTestOrders`,
+                { params }
             );
             testOrders.value = response.data.test_orders;
             console.log(response.data)
