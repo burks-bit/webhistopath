@@ -16,14 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->integer('sequence');
-            $table->integer('release_status');
-            $table->integer('order_status');
-            $table->integer('result_status');
-            $table->tinyInteger('dashboard_view');
-            $table->tinyInteger('for_release');
             $table->tinyInteger('enabled');
             $table->integer('user_id');
-            $table->string('parent_id');
             $table->timestamps();
         });
     }
