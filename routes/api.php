@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 Route::middleware(['auth:sanctum', 'token.expiry'])->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/user/phases', [AuthController::class, 'get_user_phase_accesses']);
 
 Route::get('/getBranch', [BranchController::class, 'getBranch']);
 

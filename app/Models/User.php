@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(AuditLog::class, 'performed_by');
     }
+
+    public function phases()
+    {
+        return $this->belongsToMany(Phase::class, 'user_phase_accesses', 'user_account_id', 'phase_access_id');
+    }
 }

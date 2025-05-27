@@ -34,4 +34,8 @@ class Phase extends Model
         'auto_assign'
     ];
     
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_phase_accesses', 'phase_access_id', 'user_account_id');
+    }
 }

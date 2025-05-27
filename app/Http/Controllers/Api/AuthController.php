@@ -91,5 +91,15 @@ class AuthController extends Controller
 
        return response()->json(['message' => 'Logged out successfully']);
     }
+
+    public function get_user_phase_accesses(Request $request)
+    {
+        $userId = $request->query('loggedin_user_id');
+        Log::info('get_user_phase_accesses');
+        Log::info($userId);
+        $phases = User::find($userId)->phases()->orderBy('sequence')->get(['phases.id', 'phases.name', 'phases.sequence']);
+        Log::info($phases);
+        return $phases;
+    }
     
 }

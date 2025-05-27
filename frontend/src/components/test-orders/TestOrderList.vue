@@ -84,25 +84,7 @@
                                 <small class="text-muted">{{ order.date_requested }}</small>
                             </td>
 
-                            <td class="text-center" colspan="5">
-                                <div class="d-flex flex-wrap justify-center">
-                                    <v-btn size="x-small" color="info" class="ma-1" @click="openPhaseDialog('receiving', order)">
-                                        <i class="fa fa-pencil me-1"></i> Receiving
-                                    </v-btn>
-                                    <v-btn size="x-small" color="orange" class="ma-1" @click="openPhaseDialog('grossing', order)">
-                                        <i class="fa fa-scissors me-1"></i> Grossing
-                                    </v-btn>
-                                    <v-btn size="x-small" color="indigo" class="ma-1" @click="openPhaseDialog('initialRead', order)">
-                                        <i class="fa fa-book-open me-1"></i> Initial Read
-                                    </v-btn>
-                                    <v-btn size="x-small" color="indigo" class="ma-1" @click="openPhaseDialog('finalRead', order)">
-                                        <i class="fa fa-bookmark me-1"></i> Final Read
-                                    </v-btn>
-                                    <v-btn size="x-small" color="success" class="ma-1" @click="openPhaseDialog('validation', order)">
-                                        <i class="fa fa-book-open-reader me-1"></i> Validation
-                                    </v-btn>
-                                </div>
-                            </td>
+                            <Phases :order="order" />
                         </tr>
                     </template>
                 </tbody>
@@ -118,27 +100,6 @@
                 next-icon="fa fa-chevron-right"
             />
         </div>
-
-        
-
-
-        <!-- Phase Dialog -->
-        <v-dialog v-model="phaseDialog.visible" max-width="500">
-            <v-card>
-                <v-card-title class="text-h6">
-                {{ capitalize(phaseDialog.phase) }} - {{ phaseDialog.order?.patientName }}
-                </v-card-title>
-                <v-card-text>
-                <!-- Insert your phase-specific form or logic here -->
-                <p>Perform actions related to <strong>{{ phaseDialog.phase }}</strong> phase here.</p>
-                </v-card-text>
-                <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text @click="phaseDialog.visible = false">Cancel</v-btn>
-                <v-btn color="primary" @click="savePhaseAction">Save</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
 
         <v-dialog
             v-model="newTestOrderDialog"
@@ -261,6 +222,41 @@
                                         height="170"
                                     />
                                 </div>
+
+                                <div class="px-2 py-2 bg-indigo text-white font-weight-bold text-sm rounded-t-md mt-5">
+                                    Location & Requesting Physician Info
+                                </div>
+                                <div class="">
+                                    <v-row>
+                                        <v-col>
+                                            <v-select
+                                                v-model="selectedLocationType"
+                                                :items="locationTypes"
+                                                item-title="name"
+                                                item-value="id"
+                                                label="Select Location"
+                                                variant="outlined"
+                                                hide-details
+                                                class="px-4 py-2"
+                                            ></v-select>
+                                        </v-col>
+                                        <v-col>
+                                            <v-select
+                                                v-model="selectedPhysicians"
+                                                :items="physicians"
+                                                item-title="name"
+                                                item-value="id"
+                                                label="Select Physicians"
+                                                variant="outlined"
+                                                hide-details
+                                                multiple
+                                                class="px-4 py-2"
+                                            />
+
+                                        </v-col>
+                                    </v-row>
+                                </div>
+
                                 <div class="px-2 py-2 bg-indigo text-white font-weight-bold text-sm rounded-t-md mt-5">
                                     Procedure Info
                                 </div>
@@ -442,6 +438,7 @@
 <script setup>
     import { useNewTestOrder } from '@/composables/useNewTestOrder';
     import TestOrderFilter from '@/components/test-orders/TestOrderFilter';
+    import Phases from '../phases/Phases.vue';
 
     const handleFilterSubmit = (formData) => {
         console.log('Received from child:', formData)
@@ -496,26 +493,21 @@
         { religion: 'Muslim', abbr: 'Muslim' },
     ]
 
-    const phaseDialog = ref({
-        visible: false,
-        phase: '',
-        order: null
-    })
+    // Selected physician
+    const selectedLocationType = ref(null)
+    const selectedPhysicians = ref([])
 
-    function openPhaseDialog(phase, order) {
-        phaseDialog.value.phase = phase
-        phaseDialog.value.order = order
-        phaseDialog.value.visible = true
-    }
-
-    function savePhaseAction() {
-        console.log('Saving phase action for:', phaseDialog.value)
-        phaseDialog.value.visible = false
-    }
-
-    function capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1)
-    }
+    // Sample physician list (replace with dynamic data if needed)
+    const physicians = ref([
+        { id: 1, name: 'Dr. John Doe' },
+        { id: 2, name: 'Dr. Jane Smith' },
+        { id: 3, name: 'Dr. Albert Cruz' }
+    ])
+    const locationTypes = ref([
+        { id: 1, name: 'OPD' },
+        { id: 2, name: 'ER' },
+        { id: 3, name: 'IPD' }
+    ])
 </script>
             
 <style scoped>

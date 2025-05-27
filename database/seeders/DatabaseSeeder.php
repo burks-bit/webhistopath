@@ -28,6 +28,10 @@ class DatabaseSeeder extends Seeder
             PatientSeeder::class,
             TestCodeSeeder::class,
             TestGroupSeeder::class,
+            PhaseSeeder::class,
+            UserPhaseAccessSeeder::class,
+            LocationSeeder::class,
+            LocationDetailSeeder::class,
         ]);
     }
 }
