@@ -47,4 +47,15 @@ class PatientOrder extends Model
             'id'               // Local key on TestOrder
         );
     }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'location_id');
+    }
+
+    public function patient_order_physicians()
+    {
+        return $this->hasMany(PatientOrderPhysician::class, 'specimen_id', 'specimen_id');
+    }
+    
 }

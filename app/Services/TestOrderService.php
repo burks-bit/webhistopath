@@ -147,6 +147,8 @@ class TestOrderService
             Log::info('get_test_orders With filter');
             $test_orders = PatientOrder::with([
                 'patient',
+                'location',
+                'patient_order_physicians', 
                 'test_results.test_group',
                 'test_results.test_order_details.test_order_results',
             ])
@@ -160,6 +162,8 @@ class TestOrderService
             Log::info('get_test_orders Without filter');
             $test_orders = PatientOrder::with([
                 'patient',
+                'location',
+                'patient_order_physicians.physician', 
                 'test_results.test_group',
                 'test_results.test_order_details.test_order_results',
             ])

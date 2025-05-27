@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('patient_order_physicians', function (Blueprint $table) {
             $table->id();
-            $table->string('specimen_id');
-            $table->string('physician_id');
-            $table->string('user_id');
+            $table->string('specimen_id')->nullable();
+            $table->string('physician_id')->nullable();
+            $table->string('user_id')->nullable();
             $table->timestamps();
         });
     }

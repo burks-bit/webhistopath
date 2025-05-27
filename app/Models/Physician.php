@@ -24,4 +24,9 @@ class Physician extends Model
         'clinic_contact_no',
         'clinic_contact_person',
     ];
+
+    public function patient_order_physicians()
+    {
+        return $this->hasMany(PatientOrderPhysician::class, 'physician_id'); // Fix: was using belongsToMany incorrectly
+    }
 }

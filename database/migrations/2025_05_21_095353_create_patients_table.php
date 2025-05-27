@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('branch_id');
-            $table->string('first_name');
-            $table->string('middle_name');
-            $table->string('last_name');
-            $table->date('birthdate');
-            $table->string('age');
-            $table->string('address');
-            $table->string('religion');
-            $table->string('sex');
-            $table->string('civil_status');
-            $table->string('contact_no');
+            $table->tinyInteger('branch_id')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('middle_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->date('birthdate')->nullable();
+            $table->string('age')->nullable();
+            $table->string('address')->nullable();
+            $table->string('religion')->nullable();
+            $table->string('sex')->nullable();
+            $table->string('civil_status')->nullable();
+            $table->string('contact_no')->nullable();
             $table->timestamps();
         });
     }
