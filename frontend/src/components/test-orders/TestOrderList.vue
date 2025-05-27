@@ -230,8 +230,8 @@
                                     <v-row>
                                         <v-col>
                                             <v-select
-                                                v-model="selectedLocationType"
-                                                :items="locationTypes"
+                                                v-model="selectedLocation"
+                                                :items="locations"
                                                 item-title="name"
                                                 item-value="id"
                                                 label="Select Location"
@@ -439,38 +439,45 @@
     import { useNewTestOrder } from '@/composables/useNewTestOrder';
     import TestOrderFilter from '@/components/test-orders/TestOrderFilter';
     import Phases from '../phases/Phases.vue';
+    import { onMounted } from 'vue';
 
     const handleFilterSubmit = (formData) => {
         console.log('Received from child:', formData)
         getTestOrders(formData)
     }
     const {
-        openNewTestOrder,
-        newTestOrderDialog,
-        closeNewTestOrderDialog,
-        searchQuery,
-        searchPatient,
         patients,
         selectedPatient,
-        selectPatient,
-        clearSearch,
+        searchQuery,
+        newTestOrderDialog,
         selectedTests,
-        toggleTest,
-        saveTestOrder,
         test_groups,
-        newPatient,
         newPatients,
         newPatientDialog,
+        selectedLocation,
+        selectedPhysicians,
         valid,
+        isEdit,
+        testOrders,
+        currentPage,
+        loading,
+        locations,
+        physicians,
+        openNewTestOrder,
+        closeNewTestOrderDialog,
+        searchPatient,
+        selectPatient,
+        clearSearch,
+        toggleTest,
+        saveTestOrder,
+        newPatient,
         savePatient,
         cancelnewPatient,
         openEditPatientDialog,
-        isEdit,
         openEditPatientTestOrderDialog,
-        testOrders,
-        currentPage,
         getTestOrders,
-        loading,
+        getLocations,
+        getPhysicians,
     } = useNewTestOrder();
 
     const genders = [
@@ -493,21 +500,12 @@
         { religion: 'Muslim', abbr: 'Muslim' },
     ]
 
-    // Selected physician
-    const selectedLocationType = ref(null)
-    const selectedPhysicians = ref([])
-
     // Sample physician list (replace with dynamic data if needed)
-    const physicians = ref([
-        { id: 1, name: 'Dr. John Doe' },
-        { id: 2, name: 'Dr. Jane Smith' },
-        { id: 3, name: 'Dr. Albert Cruz' }
-    ])
-    const locationTypes = ref([
-        { id: 1, name: 'OPD' },
-        { id: 2, name: 'ER' },
-        { id: 3, name: 'IPD' }
-    ])
+    
+    onMounted(() => {
+        getLocations();
+        getPhysicians();
+    });
 </script>
             
 <style scoped>

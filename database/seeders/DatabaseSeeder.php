@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             UserPhaseAccessSeeder::class,
             LocationSeeder::class,
             LocationDetailSeeder::class,
+            PhysicianSeeder::class,
         ]);
     }
 }

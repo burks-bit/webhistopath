@@ -18,6 +18,8 @@ export function useNewTestOrder() {
     const testOrders = ref({})
     const currentPage = ref(1)
     const loading = ref(false)
+    const selectedLocation = ref(null)
+    const selectedPhysicians = ref([])
 
 
     const newPatients = ref({
@@ -95,7 +97,9 @@ export function useNewTestOrder() {
         try {
             const response = await axios.post(`${backendAPIURL.backendIP()}api/saveTestOrder`,{
                 patient: selectedPatient.value,
-                tests: selectedTests.value
+                tests: selectedTests.value,
+                location: selectedLocation.value,
+                requesting_physician: selectedPhysicians.value
             })
             console.log(response.data)
             if(response.data.success == true){
@@ -193,6 +197,30 @@ export function useNewTestOrder() {
         newPatientDialog.value = true
     }
 
+    const locations = ref([])
+    const getLocations = async () => {
+        try {
+            const response = await axios.get(`${backendAPIURL.backendIP()}api/getLocations`)
+            locations.value = response.data.locations
+            console.log('============== check get_locations return =============')
+            console.log(response.data)
+        } catch (error) {
+            console.error('Failed to fetch user phases:', error)
+        }
+    }
+
+    const physicians = ref([])
+    const getPhysicians = async () => {
+        try {
+            const response = await axios.get(`${backendAPIURL.backendIP()}api/getPhysicians`)
+            physicians.value = response.data.physicians
+            console.log('============== check getPhysicians return =============')
+            console.log(response.data)
+        } catch (error) {
+            console.error('Failed to fetch physicians:', error)
+        }
+    }
+
     onMounted(() => {
         getTestOrders()
     });
@@ -213,6 +241,10 @@ export function useNewTestOrder() {
         testOrders,
         currentPage,
         loading,
+        locations,
+        physicians,
+        selectedLocation,
+        selectedPhysicians,
         openNewTestOrder,
         closeNewTestOrderDialog,
         searchPatient,
@@ -227,5 +259,7 @@ export function useNewTestOrder() {
         openEditPatientDialog,
         getTestOrders,
         openEditPatientTestOrderDialog,
+        getLocations,
+        getPhysicians,
     }
 }

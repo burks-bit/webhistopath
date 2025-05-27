@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\{
     PatientController,
     TestGroupController,
     TestOrderController,
+    LocationController,
+    PhysicianController,
 };
 
 Route::get('/user', function (Request $request) {
@@ -46,3 +48,6 @@ Route::get('/getTestOrders', [TestOrderController::class, 'getTestOrders']);
 
 Route::post('/savePatient', [PatientController::class, 'savePatient']);
 Route::put('/updatePatient', [PatientController::class, 'updatePatient']);
+
+Route::get('/getLocations', [LocationController::class, 'getLocations']);
+Route::get('/getPhysicians', [PhysicianController::class, 'getPhysicians']);

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Patient;
 use App\Models\TestGroup;
 use App\Models\PatientOrder;
+use App\Models\PatientOrderPhysician;
 use App\Models\PatientOrderDetail;
 use App\Models\TestOrder;
 use App\Models\TestResult;
@@ -49,14 +50,22 @@ class TestOrderService
                     'external_specimen_id' => $dataKey ?? null,
                     'branch_id' => 1,
                     'patient_id' => $data['patient']['id'],
-                    'patient_type' => 1,
-                    'location_id' => 1,
+                    'patient_type' => $data['location'],
+                    'location_id' => $data['location'],
                     'date_requested' => date('Y-m-d'),
                     'time_requested' => date('H:i:s'),
                     'user_id' => 1,
                     'status' => 1
                 ]);
                 Log::info('Patient order created');
+
+                foreach ($data['requesting_physician'] as $physicianId) {
+                    PatientOrderPhysician::create([
+                        'specimen_id' => $patientOrder->specimen_id,
+                        'physician_id' => $physicianId,
+                        'user_id' => 1,
+                    ]);
+                }
 
                 PatientOrderDetail::create([
                     'specimen_id' => $specimen_id,
