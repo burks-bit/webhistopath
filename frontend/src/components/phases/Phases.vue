@@ -94,12 +94,12 @@ const phaseMap = {
         color: 'green',
         label: 'Initial Result'
     },
-    "Initial Reading": {
+    "Initial Read": {
         icon: 'fa-book-medical',
         color: 'lime',
         label: 'Initial Reading'
     },
-    "Final Reading": {
+    "Final Read": {
         icon: 'fa-file-medical',
         color: 'teal',
         label: 'Final Reading'
@@ -135,8 +135,8 @@ const phaseComponentMap = {
     "Slide Release": SlideReleaseDialog,
     "Grossing": GrossingDialog,
     "Initial Result": InitialResultDialog,
-    "Initial Reading": InitialReadingDialog,
-    "Final Reading": FinalReadingDialog,
+    "Initial Read": InitialReadingDialog,
+    "Final Read": FinalReadingDialog,
     "Validation": ValidationDialog,
     "Releasing": ReleasingDialog,
 }

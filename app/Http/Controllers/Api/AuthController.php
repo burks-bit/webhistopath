@@ -58,6 +58,7 @@ class AuthController extends Controller
         $token = $tokenResult->plainTextToken;
 
         $tokenId = explode('|', $token)[0];
+        $tokenPlain = explode('|', $token)[1];
         $expiresAt = null;
 
         $configuration = Configuration::where('name', 'autoLogout')->first();
@@ -69,6 +70,9 @@ class AuthController extends Controller
                 ->where('id', $tokenId)
                 ->update(['expires_at' => $expiresAt]);
         }
+        
+        Log::info('================ token =====================');
+        Log::info($tokenPlain);
 
         return response()->json([
             'role' => $role,

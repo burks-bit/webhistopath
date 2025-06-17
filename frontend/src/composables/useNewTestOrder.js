@@ -100,7 +100,7 @@ export function useNewTestOrder() {
                 tests: selectedTests.value,
                 location: selectedLocation.value,
                 requesting_physician: selectedPhysicians.value
-            })
+            }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }})
             console.log(response.data)
             if(response.data.success == true){
                 testOrders.value = response.data.test_orders;
@@ -170,7 +170,9 @@ export function useNewTestOrder() {
                 newPatientDialog.value = false;
                 getTestOrders()
             } else {
-                await axios.post(`${backendAPIURL.backendIP()}api/savePatient`, newPatients.value)
+                await axios.post(`${backendAPIURL.backendIP()}api/savePatient`, 
+                {patient_info: newPatients.value},
+                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }})
                 // alert('patient details saved successfully')
                 // clearSearch()
                 newPatients.value = {};

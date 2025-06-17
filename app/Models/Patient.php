@@ -20,6 +20,7 @@ class Patient extends Model
         'sex',
         'civil_status',
         'contact_no',
+        'user_id',
     ];
 
     public function patient_orders()

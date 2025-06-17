@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('patient_orders', function (Blueprint $table) {
             $table->string('specimen_id')->primary();
-            $table->string('external_specimen_id');
-            $table->tinyInteger('branch_id');
-            $table->string('patient_id');
-            $table->string('patient_type');
-            $table->string('location_id');
-            $table->date('date_requested');
-            $table->time('time_requested');
-            $table->string('user_id');
-            $table->tinyInteger('status');
+            $table->string('external_specimen_id')->nullable();
+            $table->tinyInteger('branch_id')->nullable();
+            $table->string('patient_id')->nullable();
+            $table->string('patient_type')->nullable();
+            $table->string('location_id')->nullable();
+            $table->date('date_requested')->nullable();
+            $table->time('time_requested')->nullable();
+            $table->string('user_id')->nullable();
+            $table->tinyInteger('status')->nullable();
             $table->timestamps();
         });
     }

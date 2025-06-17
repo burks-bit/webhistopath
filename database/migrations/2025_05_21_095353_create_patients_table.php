@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('sex')->nullable();
             $table->string('civil_status')->nullable();
             $table->string('contact_no')->nullable();
+            $table->string('user_id')->nullable();
             $table->timestamps();
         });
     }

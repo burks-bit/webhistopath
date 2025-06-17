@@ -26,6 +26,7 @@ export function useAuth() {
   };
 
   const login = async ({ email, password }) => {
+    console.log('login triggered')
     if (!email || !password) {
       showAlert('Validation Error', 'warning', 'Both fields are required.');
       return false;

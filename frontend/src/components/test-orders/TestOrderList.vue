@@ -29,46 +29,46 @@
             <v-table style="height: 515px;" class="table-fixed">
                 <thead>
                     <tr>
-                    <th class="text-center bg-indigo" style="" colspan="2">Patient Name</th>
-                    <th class="text-center bg-indigo" style="">Accession #</th>
-                    <th class="text-center bg-indigo" style="" colspan="5">Histopath Phases</th>
+                        <th class="text-center bg-indigo" style="" colspan="2">Patient Name</th>
+                        <th class="text-center bg-indigo" style="">Accession #</th>
+                        <th class="text-center bg-indigo" style="" colspan="5">Histopath Phases</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <template v-for="(order, index) in testOrders.data" :key="order.id">
                         <tr>
-                            <td class="pa-2 bg-green" style="width: 1px;"></td>
-                            <td class="align-top pt-1 pb-2">
-                            <div class="d-flex">
-                                <div class="pt-2">
-                                    <img 
-                                        :src="order.patient.sex === 'M' ? '/web_images/male.png' : '/web_images/female.png'" 
-                                        alt="Patient Image"
-                                        class="rounded-full object-cover"
-                                        width="65"
-                                        height="65"
-                                    />
+                            <td class="pa-2 bg-green" style="width: 1%;"></td>
+                            <td class="align-top pt-1 pb-2" style="width: 20%;">
+                                <div class="d-flex">
+                                    <div class="pt-2">
+                                        <img 
+                                            :src="order.patient.sex === 'M' ? '/web_images/male.png' : '/web_images/female.png'" 
+                                            alt="Patient Image"
+                                            class="rounded-full object-cover"
+                                            width="65"
+                                            height="65"
+                                        />
+                                    </div>
+                                    <div class="pl-3 pt-1">
+                                        <b class="text-success text-uppercase">{{ order.patient.last_name }}</b>,
+                                        {{ order.patient.first_name }} {{ order.patient.middle_name }}
+                                        <br>
+                                        <small class="text-muted">{{ order.patient.age }} y/o • {{ order.patient.sex }}</small><br>
+                                        <v-btn
+                                            class="mt-2 text-capitalize"
+                                            color="info"
+                                            size="x-small"
+                                            variant="tonal"
+                                            @click="openEditPatientTestOrderDialog(order.patient)"
+                                        >
+                                            <i class="fa fa-edit me-1"></i> Edit Profile
+                                        </v-btn>
+                                    </div>
                                 </div>
-                                <div class="pl-3 pt-1">
-                                    <b class="text-success text-uppercase">{{ order.patient.last_name }}</b>,
-                                    {{ order.patient.first_name }} {{ order.patient.middle_name }}
-                                    <br>
-                                    <small class="text-muted">{{ order.patient.age }} y/o • {{ order.patient.sex }}</small><br>
-                                    <v-btn
-                                        class="mt-2 text-capitalize"
-                                        color="info"
-                                        size="x-small"
-                                        variant="tonal"
-                                        @click="openEditPatientTestOrderDialog(order.patient)"
-                                    >
-                                        <i class="fa fa-edit me-1"></i> Edit Profile
-                                    </v-btn>
-                                </div>
-                            </div>
                             </td>
 
-                            <td class="text-center align-top">
+                            <td class="text-center align-top" style="width: 20%;">
                                 <b>20250523-00{{ index+1 }}</b><br>
                                 <!-- <b>{{ order.specimen_id }}</b><br> -->
                                 <!-- <v-btn
@@ -84,7 +84,9 @@
                                 <small class="text-muted">{{ order.date_requested }}</small>
                             </td>
 
-                            <Phases :order="order" />
+                            <td colspan="5" style="width: 59%;">
+                                <Phases :order="order" />
+                            </td>
                         </tr>
                     </template>
                 </tbody>
@@ -445,6 +447,9 @@
         console.log('Received from child:', formData)
         getTestOrders(formData)
     }
+    console.log('testorder list')
+    console.log(localStorage.getItem('user_id'))
+    console.log(localStorage.getItem('token'))
     const {
         patients,
         selectedPatient,

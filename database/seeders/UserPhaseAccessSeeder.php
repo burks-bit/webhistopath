@@ -29,7 +29,7 @@ class UserPhaseAccessSeeder extends Seeder
 
         foreach ($phases as $index => $phase) {
             DB::table('user_phase_accesses')->insert([
-                'user_account_id' => 1,
+                'user_account_id' =>3,
                 'phase_access_id' => $index + 1,
                 'enabled' => 1,
                 'created_at' => now(),

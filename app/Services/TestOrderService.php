@@ -14,6 +14,7 @@ use App\Models\TestOrderResult;
 use App\Models\SequentialSpecimenId;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 use DateTime;
 
@@ -42,7 +43,7 @@ class TestOrderService
 
                 SequentialSpecimenId::create([
                     'date_generated' => now(),
-                    'user_id' => 1
+                    'user_id' => Auth::id()
                 ]);
 
                 $patientOrder = PatientOrder::create([
@@ -54,7 +55,7 @@ class TestOrderService
                     'location_id' => $data['location'],
                     'date_requested' => date('Y-m-d'),
                     'time_requested' => date('H:i:s'),
-                    'user_id' => 1,
+                    'user_id' => Auth::id(),
                     'status' => 1
                 ]);
                 Log::info('Patient order created');
@@ -63,7 +64,7 @@ class TestOrderService
                     PatientOrderPhysician::create([
                         'specimen_id' => $patientOrder->specimen_id,
                         'physician_id' => $physicianId,
-                        'user_id' => 1,
+                        'user_id' => Auth::id()
                     ]);
                 }
 
@@ -126,7 +127,7 @@ class TestOrderService
                         'test_order_detail_id' => $testOrderDetail->id,
                         'value' => NULL,
                         'status' => 1,
-                        'user_id' => 1,
+                        'user_id' => Auth::id()
                     ]);
                 }
             }

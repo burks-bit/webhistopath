@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Patient;
 use App\Models\PatientOrderDetail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use DateTime;
 use Exception;
 
@@ -13,21 +14,22 @@ class PatientService
     public function save_patient($data)
     {
         try {
-            $birthdate = new DateTime($data['birthdate']);
+            $birthdate = new DateTime($data['patient_info']['birthdate']);
             $today = new DateTime();
             $age = $today->diff($birthdate)->y;
             $patients = Patient::create([
                 'branch_id' => 1,
-                'first_name' => $data['first_name'],
-                'middle_name' => $data['middle_name'],
-                'last_name' => $data['last_name'],
-                'birthdate' => $data['birthdate'],
+                'first_name' => $data['patient_info']['first_name'],
+                'middle_name' => $data['patient_info']['middle_name'],
+                'last_name' => $data['patient_info']['last_name'],
+                'birthdate' => $data['patient_info']['birthdate'],
                 'age' => $age,
-                'address' => $data['address'],
-                'religion' => $data['religion'],
-                'sex' => $data['sex'],
-                'civil_status' => $data['civil_status'],
-                'contact_no' => $data['contact_no'],
+                'address' => $data['patient_info']['address'],
+                'religion' => $data['patient_info']['religion'],
+                'sex' => $data['patient_info']['sex'],
+                'civil_status' => $data['patient_info']['civil_status'],
+                'contact_no' => $data['patient_info']['contact_no'],
+                'user_id' => Auth::id()
             ]);
 
             return $patients;
@@ -58,6 +60,7 @@ class PatientService
             $patient->sex = $data['sex'];
             $patient->civil_status = $data['civil_status'];
             $patient->contact_no = $data['contact_no'];
+            $patient->user_id = Auth::id();
             $patient->updated_at = now();
             $patient->save();
             
